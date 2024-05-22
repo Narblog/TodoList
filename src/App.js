@@ -1,24 +1,38 @@
-import logo from './logo.svg';
+
+import { useEffect, useState } from 'react';
 import './App.css';
+import TodoList from './components/TodoList/TodoList';
 
 function App() {
+  const [tasks,setTasks]=useState([])
+  const[done,setDone]=useState(0)
+
+  const addTask=(task)=>{
+    setTasks([task,...tasks])
+  }
+  useEffect(()=>{
+    setDone(tasks.filter(item=>item.done).length)
+  },[tasks])
+  const doneTask=(task)=>{
+    task.done=true
+    task.timeCompleted=Date.now()
+    setTasks([...tasks])
+  }
+  const cancelTask=(task)=>{
+    task.done=false
+    task.timeCompleted=null
+    setTasks([...tasks])
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+                <>
+                        <TodoList
+                            data={tasks}
+                            done={done}
+                            onComplete={doneTask}
+                            onAdd={addTask}
+                            onCancel={cancelTask}/>
+
+                </>
   );
 }
 
